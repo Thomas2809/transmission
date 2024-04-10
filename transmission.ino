@@ -3,7 +3,7 @@
 // Main_Robotique
 // Giarrizzo Thomas
 // 6 ème électronique Inraci
-// Hardwarde: Arduino_feather_ESP32, M5Stack_Paper, Adc1115(I2C), Servomoteurs, capteur_de_fexion_ZD10-100, 
+// Hardwarde: Arduino_feather_ESP32, M5Stack_Paper, Adc1115(I2C), Servomoteurs, capteur_de_fexion_ZD10-100,
 // 18 mars 2024
 
 
@@ -13,6 +13,9 @@
 #include <Wire.h>
 #include "DFRobot_ADS1115.h"
 #include <M5EPD.h>
+
+
+//bref, ici on fait les choses bien ...
 
 
 //********************************Constante**********************************
@@ -27,7 +30,7 @@ char sendtab[NB_data];
 String slaveName = "ESP32-BT-Slave";  // Change this to reflect the real name of your slave BT device
 String myName = "ESP32-BT-Master";
 int16_t adc0, adc1, adc2;
-int16_t adc6, adc7; //   _t: 
+int16_t adc6, adc7; //   _t:
 
 //*******************************Objet****************************************
 BluetoothSerial SerialBT;
@@ -45,14 +48,14 @@ esp_timer_handle_t timer;
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
-  
+
 
   static unsigned int cpt = 0;
   //C'est ici que tu écris ce que tu veux qui arrive toutes les 50ms
-  Serial.printf("%d-> ",cpt++);// incrémante le compteurs 
+  Serial.printf("%d-> ",cpt++);// incrémante le compteurs
 
 
-   if (ads2.checkADS1115()) 
+   if (ads2.checkADS1115())
   {   // gère les données du deuxième module
 
 
@@ -66,7 +69,7 @@ void IRAM_ATTR onTimer(void *param) {
     Serial.println("ADS1115-gauche Disconnected!");
   }
 
-  if (ads1.checkADS1115()) 
+  if (ads1.checkADS1115())
   {   // gère les données du premier module
 
     adc2 = ads1.readVoltage(2);
@@ -75,10 +78,10 @@ void IRAM_ATTR onTimer(void *param) {
     adc1 = ads1.readVoltage(1);
     Serial.printf("A11:%5d ",adc1 / 25);
 
-    adc0 = ads1.readVoltage(0); 
-    Serial.printf("A10:%5d \n",255- adc0/25); 
+    adc0 = ads1.readVoltage(0);
+    Serial.printf("A10:%5d \n",255- adc0/25);
   }
-  else 
+  else
   {
     Serial.println("ADS1115-droite Disconnected!");
   }
@@ -91,14 +94,14 @@ void IRAM_ATTR onTimer(void *param) {
   sendtab[5] = char(adc7 / 25);
   sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
 
-  for (char cptSend = 0; cptSend < NB_data; cptSend++) 
-  {  
+  for (char cptSend = 0; cptSend < NB_data; cptSend++)
+  {
     SerialBT.print(sendtab[cptSend]);
     #ifdef debug_ADC
       Serial.println(sendtab[cptSend]);
     #endif
   }
-  
+
 }
 //*******************************Initiation**************************************
 void setup() {
@@ -137,7 +140,7 @@ void setup() {
       Serial.println("Failed to reconnect. Make sure remote device is available and in range, then restart app.");
     }
   }
-  
+
   M5.begin();
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U); // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
   M5.EPD.SetRotation(90);
@@ -145,7 +148,7 @@ void setup() {
   M5.EPD.Clear(true);
   canvas.createCanvas(540, 960);
   canvas.setTextSize(5);
-  
+
 
   ads1.setAddr_ADS1115(ADS1115_IIC_ADDRESS1);  // 0x49
   ads2.setAddr_ADS1115(ADS1115_IIC_ADDRESS0);  // 0x48
@@ -154,14 +157,14 @@ void setup() {
   ads1.setMode(eMODE_SINGLE); // Définition du mode de fonctionnement en mode unique
   ads1.setRate(eRATE_128);  // Taux d'échantillonnage à 128SPS (défaut)
   ads1.setOSMode(eOSMODE_SINGLE);  // Définition du mode de déclenchement en mode unique
- 
+
 
   ads2.setGain(eGAIN_TWOTHIRDS);
   ads2.setMode(eMODE_SINGLE);
   ads2.setRate(eRATE_128);
   ads2.setOSMode(eOSMODE_SINGLE);
-  
-  
+
+
 // Configuration de l'interruption du timer
 
   esp_timer_create_args_t timerArgs; // crée une structure pour configurer le timer
@@ -169,14 +172,14 @@ void setup() {
   timerArgs.arg = NULL; // rien de plus n'est passé à la fonction de rappel
   esp_timer_create(&timerArgs, &timer); //Création du timer
   esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
-  
+
 }
 
 
 void loop() {
 
 static int cpt=0;
- /* 
+ /*
   canvas.drawString("ADS1", 10, 0);
   canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 60);
   canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 110);
@@ -184,7 +187,7 @@ static int cpt=0;
   canvas.drawString("ADS2", 10, 210);
   canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 260);
   canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 300);
-  
+
   canvas.drawString("Life CPT: " + String(cpt++), 10, 360);
   canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
   delay(20);  // Ajout d'un délai
