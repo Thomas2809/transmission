@@ -15,7 +15,7 @@
 #include <M5EPD.h>
 
 
-//bref, ici on fait les choses bien ...
+//C'est ici
 
 
 //********************************Constante**********************************
