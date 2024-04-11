@@ -11,17 +11,12 @@
 
 #include "BluetoothSerial.h"
 #include <Wire.h>
-#include "DFRobot_ADS1115.h"
 #include "transmission.h"
-
-// TGa
-
 
 //********************************Constante**********************************
 #define NB_data 7
-//#define debug_ADC
-
 int point[2][2];
+//#define debug_ADC
 
 //********************************Variable***********************************
 char sendtab[NB_data];
@@ -30,11 +25,6 @@ int16_t adc6, adc7;  //   _t:
 
 //*******************************Objet****************************************
 //BluetoothSerial SerialBT;
-
-DFRobot_ADS1115 ads1(&secondWire);
-DFRobot_ADS1115 ads2(&secondWire);
-
-
 esp_timer_handle_t timer;
 //******************************
 #if !defined(CONFIG_BT_SPP_ENABLED)
@@ -44,14 +34,11 @@ esp_timer_handle_t timer;
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
 
-
   static unsigned int cpt = 0;
   //C'est ici que tu écris ce que tu veux qui arrive toutes les 50ms
   Serial.printf("%d-> ", cpt++);  // incrémante le compteurs
 
-
   if (ads2.checkADS1115()) {  // gère les données du deuxième module
-
 
     adc7 = ads2.readVoltage(3);
     Serial.printf("A03:%5d ", adc7 / 25);
@@ -84,54 +71,32 @@ void IRAM_ATTR onTimer(void *param) {
   sendtab[5] = char(adc7 / 25);
   sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
 
-/*
+
   for (char cptSend = 0; cptSend < NB_data; cptSend++) {
-     SerialBT.print(sendtab[cptSend]);
+    SerialBT.print(sendtab[cptSend]);
 #ifdef debug_ADC
     Serial.println(sendtab[cptSend]);
 #endif
-
-  }*/
+  }
 }
-//*******************************Initiation**************************************
+//*******************************Initialisation**************************************
 void setup() {
- 
-  init_bluetooth();
-  delay(100);
 
- 
+  init_bluetooth();
+
+  delay(100);
 
   M5.begin();
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
-
-  init_screen(90,90,540,960,5);
-
-
-  ads1.setAddr_ADS1115(ADS1115_IIC_ADDRESS1);  // 0x49
-  ads2.setAddr_ADS1115(ADS1115_IIC_ADDRESS0);  // 0x48
-
-  ads1.setGain(eGAIN_TWOTHIRDS);   // Définit le gain à deux tiers
-  ads1.setMode(eMODE_SINGLE);      // Définition du mode de fonctionnement en mode unique
-  ads1.setRate(eRATE_128);         // Taux d'échantillonnage à 128SPS (défaut)
-  ads1.setOSMode(eOSMODE_SINGLE);  // Définition du mode de déclenchement en mode unique
-
-
-  ads2.setGain(eGAIN_TWOTHIRDS);
-  ads2.setMode(eMODE_SINGLE);
-  ads2.setRate(eRATE_128);
-  ads2.setOSMode(eOSMODE_SINGLE);
-
-
-  // Configuration de l'interruption du timer
-
+  init_screen(90, 90, 540, 960, 5); // rotion x, rotation y, Longueur, largeur, taille
+  init_ads();
+  //************* Configuration de l'interruption du timer ************
   esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
   timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
   timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
   esp_timer_create(&timerArgs, &timer);    //Création du timer
   esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
 }
-
-
 void loop() {
 
   static int cpt = 0;

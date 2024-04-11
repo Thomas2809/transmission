@@ -5,12 +5,16 @@
 //************* DEFINITION DES OBJETS ************
 BluetoothSerial SerialBT;
 M5EPD_Canvas canvas(&M5.EPD);
+DFRobot_ADS1115 ads1(&secondWire);
+DFRobot_ADS1115 ads2(&secondWire);
 
 //************* DEFINITION DES constantes ************
 
 const char *pin = "1234";  // Change this to reflect the pin expected by the real slave BT device
 String myName = "ESP32-BT-Master";
 String slaveName = "ESP32-BT-Slave";  // Change this to reflect the real name of your slave BT device
+
+//************* Initialisation bluetooth ************
 
 void init_bluetooth() {
 
@@ -51,6 +55,8 @@ void init_bluetooth() {
   }
 }
 
+//************* Initialisation de l'ecran ************
+
 void init_screen(int sens_Sc,int sens_Tp, int largeur, int hauteur, int texte_size)
 {
 
@@ -59,4 +65,20 @@ void init_screen(int sens_Sc,int sens_Tp, int largeur, int hauteur, int texte_si
     M5.EPD.Clear(true);
     canvas.createCanvas(largeur, hauteur);
     canvas.setTextSize(texte_size);
+}
+
+void init_ads(){
+  
+ ads1.setAddr_ADS1115(ADS1115_IIC_ADDRESS1);  // 0x49
+  ads2.setAddr_ADS1115(ADS1115_IIC_ADDRESS0);  // 0x48
+
+  ads1.setGain(eGAIN_TWOTHIRDS);   // Définit le gain à deux tiers
+  ads1.setMode(eMODE_SINGLE);      // Définition du mode de fonctionnement en mode unique
+  ads1.setRate(eRATE_128);         // Taux d'échantillonnage à 128SPS (défaut)
+  ads1.setOSMode(eOSMODE_SINGLE);  // Définition du mode de déclenchement en mode unique
+
+  ads2.setGain(eGAIN_TWOTHIRDS);
+  ads2.setMode(eMODE_SINGLE);
+  ads2.setRate(eRATE_128);
+  ads2.setOSMode(eOSMODE_SINGLE);
 }
