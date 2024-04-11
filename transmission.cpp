@@ -33,10 +33,14 @@ void init_bluetooth() {
   Serial.printf("Connecting to slave BT device named \"%s\"\n", slaveName.c_str());
   if (connected) {
     Serial.println("Connected Successfully!");
-  } else {
-    while (!SerialBT.connected(10000)) {
-      Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");
-    }
+  } else 
+  {
+     
+      while (!SerialBT.connected(10000)) 
+      {
+        Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");
+      }
+    
   }
   
   // Disconnect() may take up to 10 secs max
@@ -48,10 +52,16 @@ void init_bluetooth() {
   
   if (connected) {
     Serial.println("Reconnected Successfully!");
-  } else {
-    while (!SerialBT.connected(10000)) {
-      Serial.println("Failed to reconnect. Make sure remote device is available and in range, then restart app.");
-    }
+  } 
+  else 
+  {
+    
+      while (!SerialBT.connected(10000)) 
+      {
+        Serial.println("Failed to reconnect. Make sure remote device is available and in range, then restart app.");
+      }
+    
+
   }
 }
 
@@ -68,7 +78,7 @@ void init_screen(int sens_Sc,int sens_Tp, int largeur, int hauteur, int texte_si
 }
 
 void init_ads(){
-  
+
  ads1.setAddr_ADS1115(ADS1115_IIC_ADDRESS1);  // 0x49
   ads2.setAddr_ADS1115(ADS1115_IIC_ADDRESS0);  // 0x48
 

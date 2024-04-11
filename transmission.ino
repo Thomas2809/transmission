@@ -17,6 +17,7 @@
 #define NB_data 7
 int point[2][2];
 //#define debug_ADC
+#define PIN_G33 33
 
 //********************************Variable***********************************
 char sendtab[NB_data];
@@ -40,9 +41,10 @@ void IRAM_ATTR onTimer(void *param) {
 
   if (ads2.checkADS1115()) {  // gère les données du deuxième module
 
+ 
     adc7 = ads2.readVoltage(3);
     Serial.printf("A03:%5d ", adc7 / 25);
-
+ 
     adc6 = ads2.readVoltage(2);
     Serial.printf("A02:%5d ", adc6 / 25);
   } else {
@@ -53,10 +55,10 @@ void IRAM_ATTR onTimer(void *param) {
 
     adc2 = ads1.readVoltage(2);
     Serial.printf("A12:%5d ", adc2 / 25);
-
+digitalWrite(PIN_G33, HIGH); //1
     adc1 = ads1.readVoltage(1);
     Serial.printf("A11:%5d ", adc1 / 25);
-
+digitalWrite(PIN_G33, LOW); //0
     adc0 = ads1.readVoltage(0);
     Serial.printf("A10:%5d \n", 255 - adc0 / 25);
   } else {
@@ -82,13 +84,16 @@ void IRAM_ATTR onTimer(void *param) {
 //*******************************Initialisation**************************************
 void setup() {
 
-  init_bluetooth();
 
-  delay(100);
+
+  delay(1000);
 
   M5.begin();
+  #ifdef USE_bluetooth
+  init_bluetooth();
+  #endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
-  init_screen(90, 90, 540, 960, 5); // rotion x, rotation y, Longueur, largeur, taille
+  init_screen(90, 90, 540, 960, 5);                       // rotion x, rotation y, Longueur, largeur, taille
   init_ads();
   //************* Configuration de l'interruption du timer ************
   esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
@@ -96,11 +101,16 @@ void setup() {
   timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
   esp_timer_create(&timerArgs, &timer);    //Création du timer
   esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
+
+  pinMode(PIN_G33, OUTPUT); 
+ 
+
+ 
 }
 void loop() {
 
   static int cpt = 0;
-  /*
+
   canvas.drawString("ADS1", 10, 0);
   canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 60);
   canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 110);
@@ -112,7 +122,7 @@ void loop() {
   canvas.drawString("Life CPT: " + String(cpt++), 10, 360);
   canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
   delay(20);  // Ajout d'un délai
-  */
+
   // SerialBT.println('@');
   //Serial.println('@');
 

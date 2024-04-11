@@ -3,6 +3,8 @@
 #include <M5EPD.h>
 #include "DFRobot_ADS1115.h"
 
+//#define USE_bluetooth
+
 extern M5EPD_Canvas canvas;
 extern DFRobot_ADS1115 ads1;
 extern DFRobot_ADS1115 ads2;
