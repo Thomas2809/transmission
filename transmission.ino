@@ -31,6 +31,16 @@ esp_timer_handle_t timer;
 #if !defined(CONFIG_BT_SPP_ENABLED)
 #error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
 #endif
+
+
+#define MODE_MANUEL 1
+#define MODE_BT 2
+int point2[2][2];
+
+byte Mode = 0;
+bool inOptionsMenu = false;
+
+
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
@@ -41,10 +51,10 @@ void IRAM_ATTR onTimer(void *param) {
 
   if (ads2.checkADS1115()) {  // gère les données du deuxième module
 
- 
+
     adc7 = ads2.readVoltage(3);
     Serial.printf("A03:%5d ", adc7 / 25);
- 
+
     adc6 = ads2.readVoltage(2);
     Serial.printf("A02:%5d ", adc6 / 25);
   } else {
@@ -55,10 +65,10 @@ void IRAM_ATTR onTimer(void *param) {
 
     adc2 = ads1.readVoltage(2);
     Serial.printf("A12:%5d ", adc2 / 25);
-digitalWrite(PIN_G33, HIGH); //1
+    //digitalWrite(PIN_G33, HIGH); //1
     adc1 = ads1.readVoltage(1);
     Serial.printf("A11:%5d ", adc1 / 25);
-digitalWrite(PIN_G33, LOW); //0
+    //digitalWrite(PIN_G33, LOW); //0
     adc0 = ads1.readVoltage(0);
     Serial.printf("A10:%5d \n", 255 - adc0 / 25);
   } else {
@@ -84,28 +94,59 @@ digitalWrite(PIN_G33, LOW); //0
 //*******************************Initialisation**************************************
 void setup() {
 
-
-
   delay(1000);
-
   M5.begin();
-  #ifdef USE_bluetooth
+  //#ifdef USE_bluetooth
   init_bluetooth();
-  #endif
+  //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
-  init_screen(90, 90, 540, 960, 5);                       // rotion x, rotation y, Longueur, largeur, taille
+  init_screen(90, 90, 540, 960, 5);
+  canvas.drawString("Choisissez le mode", 10, 100);
+  canvas.drawString("Mode BT", 10, 200);
+  canvas.drawString("Mode Auto", 10, 300);
+  canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // rotion x, rotation y, Longueur, largeur, taille
+  while (Mode == 0) {
+
+    if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
+      if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
+        M5.TP.update();                                  // Met à jour les informations du pavé tactile
+        for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
+          tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
+          if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+            // Vérifie si le toucher est dans la zone définie
+            if (!inOptionsMenu) {
+              if (FingerItem.y < 300) {
+                Mode = MODE_BT;
+                canvas.fillCanvas(0);  // Efface l'écran
+                canvas.setTextSize(5);
+                canvas.drawString("Mode BT", 10, 400);
+                rectangle2();
+                canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec le gants" sur l'écran
+                init_bluetooth();
+                //************* Configuration de l'interruption du timer ************
+                esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
+                timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
+                timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
+                esp_timer_create(&timerArgs, &timer);    //Création du timer
+                esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
+              } else if (FingerItem.y < 600) {
+                Mode = MODE_MANUEL;
+
+                canvas.fillCanvas(0);  // Efface l'écran
+                canvas.setTextSize(5);
+                canvas.drawString("Mode Manuel", 20, 400);
+                canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec la M5" sur l'écran
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   init_ads();
   //************* Configuration de l'interruption du timer ************
-  esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
-  timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
-  timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
-  esp_timer_create(&timerArgs, &timer);    //Création du timer
-  esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
 
-  pinMode(PIN_G33, OUTPUT); 
- 
-
- 
+  //pinMode(PIN_G33, OUTPUT);
 }
 void loop() {
 
@@ -151,4 +192,7 @@ void loop() {
       }
     }
   }
+}
+void rectangle2() {
+  canvas.drawRect(7, 390, 420, 100, 15);
 }
