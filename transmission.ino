@@ -1,5 +1,5 @@
 //***************************************************************************
-// envoie_donne_m5paper.ino
+// transmission.ino
 // Main_Robotique
 // Giarrizzo Thomas
 // 6 ème électronique Inraci
@@ -18,12 +18,15 @@
 int point[2][2];
 //#define debug_ADC
 #define PIN_G33 33
-
+#define MODE_MANUEL 1
+#define MODE_BT 2
 //********************************Variable***********************************
 char sendtab[NB_data];
 int16_t adc0, adc1, adc2;
 int16_t adc6, adc7;  //   _t:
-
+int point2[2][2];
+byte Mode = 0;
+bool inOptionsMenu = false;
 //*******************************Objet****************************************
 //BluetoothSerial SerialBT;
 esp_timer_handle_t timer;
@@ -31,15 +34,6 @@ esp_timer_handle_t timer;
 #if !defined(CONFIG_BT_SPP_ENABLED)
 #error Serial Bluetooth not available or not enabled. It is only available for the ESP32 chip.
 #endif
-
-
-#define MODE_MANUEL 1
-#define MODE_BT 2
-int point2[2][2];
-
-byte Mode = 0;
-bool inOptionsMenu = false;
-
 
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
@@ -97,7 +91,7 @@ void setup() {
   delay(1000);
   M5.begin();
   //#ifdef USE_bluetooth
-  init_bluetooth();
+  //init_bluetooth();
   //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
   init_screen(90, 90, 540, 960, 5);
@@ -105,6 +99,8 @@ void setup() {
   canvas.drawString("Mode BT", 10, 200);
   canvas.drawString("Mode Auto", 10, 300);
   canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // rotion x, rotation y, Longueur, largeur, taille
+  init_ads1();
+  init_ads2();
   while (Mode == 0) {
 
     if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
@@ -121,6 +117,7 @@ void setup() {
                 canvas.setTextSize(5);
                 canvas.drawString("Mode BT", 10, 400);
                 rectangle2();
+
                 canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec le gants" sur l'écran
                 init_bluetooth();
                 //************* Configuration de l'interruption du timer ************
@@ -134,7 +131,7 @@ void setup() {
 
                 canvas.fillCanvas(0);  // Efface l'écran
                 canvas.setTextSize(5);
-                canvas.drawString("Mode Manuel", 20, 400);
+                canvas.drawString("Mode Auto", 20, 400);
                 canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec la M5" sur l'écran
               }
             }
@@ -143,7 +140,6 @@ void setup() {
       }
     }
   }
-  init_ads();
   //************* Configuration de l'interruption du timer ************
 
   //pinMode(PIN_G33, OUTPUT);
@@ -151,19 +147,19 @@ void setup() {
 void loop() {
 
   static int cpt = 0;
+  if (Mode == MODE_BT) {
+    canvas.drawString("ADS1", 10, 0);
+    canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 60);
+    canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 110);
+    canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 150);
+    canvas.drawString("ADS2", 10, 210);
+    canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 260);
+    canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 300);
 
-  canvas.drawString("ADS1", 10, 0);
-  canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 60);
-  canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 110);
-  canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 150);
-  canvas.drawString("ADS2", 10, 210);
-  canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 260);
-  canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 300);
-
-  canvas.drawString("Life CPT: " + String(cpt++), 10, 360);
-  canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
-  delay(20);  // Ajout d'un délai
-
+    canvas.drawString("Life CPT: " + String(cpt++), 10, 360);
+    canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
+    delay(20);  // Ajout d'un délai
+  }
   // SerialBT.println('@');
   //Serial.println('@');
 

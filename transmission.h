@@ -12,4 +12,5 @@ extern BluetoothSerial SerialBT;
 
 void init_bluetooth(void);
 void init_screen(int sens_Sc,int sens_Tp, int largeur, int hauteur, int texte_size);
-void init_ads(void);
+void init_ads1(void);
+void init_ads2(void);
