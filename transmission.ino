@@ -18,14 +18,17 @@
 int point[2][2];
 //#define debug_ADC
 #define PIN_G33 33
+
 #define MODE_MANUEL 1
 #define MODE_BT 2
+#define MODE_MENU 0
+
 //********************************Variable***********************************
 char sendtab[NB_data];
 int16_t adc0, adc1, adc2;
 int16_t adc6, adc7;  //   _t:
 int point2[2][2];
-byte Mode = 0;
+byte Mode = MODE_MENU;
 bool inOptionsMenu = false;
 //*******************************Objet****************************************
 //BluetoothSerial SerialBT;
@@ -95,75 +98,122 @@ void setup() {
   //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
   init_screen(90, 90, 540, 960, 5);
-  canvas.drawString("Choisissez le mode", 10, 100);
-  canvas.drawString("Mode BT", 10, 200);
-  canvas.drawString("Mode Auto", 10, 300);
-  canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // rotion x, rotation y, Longueur, largeur, taille
   init_ads1();
   init_ads2();
-  while (Mode == 0) {
+  //************* Configuration de l'interruption du timer ************
+  esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
+  timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
+  timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
+  esp_timer_create(&timerArgs, &timer);    //Création du timer
+  esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
+  //pinMode(PIN_G33, OUTPUT);
+}
+void loop() {
 
-    if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
-      if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
-        M5.TP.update();                                  // Met à jour les informations du pavé tactile
-        for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
-          tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-          if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
-            // Vérifie si le toucher est dans la zone définie
-            if (!inOptionsMenu) {
-              if (FingerItem.y < 300) {
-                Mode = MODE_BT;
-                canvas.fillCanvas(0);  // Efface l'écran
-                canvas.setTextSize(5);
-                canvas.drawString("Mode BT", 10, 400);
-                rectangle2();
-
-                canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec le gants" sur l'écran
-                init_bluetooth();
-                //************* Configuration de l'interruption du timer ************
-                esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
-                timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
-                timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
-                esp_timer_create(&timerArgs, &timer);    //Création du timer
-                esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
-              } else if (FingerItem.y < 600) {
-                Mode = MODE_MANUEL;
-
-                canvas.fillCanvas(0);  // Efface l'écran
-                canvas.setTextSize(5);
-                canvas.drawString("Mode Auto", 20, 400);
-                canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);  // Affiche "Controle avec la M5" sur l'écran
+  /*if (Serial1.available()) {
+              char Menu = Serial1.read();*/
+  //canvas.drawString("le mode ", Menu, 20, 400);
+  switch (Mode) {
+    case MODE_MENU:
+      canvas.clear();
+      canvas.setTextSize(5);
+      canvas.drawString("Choisissez le mode", 10, 100);
+      canvas.drawString("Mode BT", 10, 200);
+      canvas.drawString("Mode Auto", 10, 400);
+      canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
+      if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
+        if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
+          M5.TP.update();                                  // Met à jour les informations du pavé tactile
+          for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
+            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
+            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+              // Vérifie si le toucher est dans la zone définie
+              if (!inOptionsMenu) {
+                if (FingerItem.y< 230 & FingerItem.y > 180) {
+                  Mode = MODE_BT;
+                } else if (FingerItem.y< 440 & FingerItem.y> 380) {
+                  Mode = MODE_MANUEL;
+                }
               }
             }
           }
         }
       }
-    }
-  }
-  //************* Configuration de l'interruption du timer ************
+      break;
+    case MODE_MANUEL:
+      canvas.clear();
+      canvas.setTextSize(3);
+      canvas.drawString("Welcom to manuel mode", 10, 100);
+      canvas.drawString("Retour", 400, 800);
+      canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
+      if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
+        if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
+          M5.TP.update();                                  // Met à jour les informations du pavé tactile
+          for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
+            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
+            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+              // Vérifie si le toucher est dans la zone définie
+              if (!inOptionsMenu) {
+                Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-  //pinMode(PIN_G33, OUTPUT);
+                if (FingerItem.y< 830 & FingerItem.y > 780) {
+                  Mode = MODE_MENU;
+                }
+              }
+            }
+          }
+        }
+      }
+      break;
+    case MODE_BT:
+      canvas.clear();
+      canvas.setTextSize(3);
+      canvas.drawString("Welcom to Bluetooth mode", 10, 50);
+      canvas.drawString("Retour", 400, 800);
+      static int cpt = 0;
+      canvas.drawString("ADS1", 10, 130);
+      canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 160);
+      canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 210);
+      canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 250);
+      canvas.drawString("ADS2", 10, 310);
+      canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 360);
+      canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 400);
+
+      canvas.drawString("Life CPT: " + String(cpt++), 10, 560);
+      canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
+      delay(20);  // Ajout d'un délai
+      if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
+        if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
+          M5.TP.update();                                  // Met à jour les informations du pavé tactile
+          for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
+            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
+            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+              // Vérifie si le toucher est dans la zone définie
+              if (!inOptionsMenu) {
+                Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
+
+                if (FingerItem.y< 830 & FingerItem.y > 780) {
+                  Mode = MODE_MENU;
+                }
+              }
+            }
+          }
+        }
+      }
+
+
+      break;
+  }
 }
-void loop() {
 
-  static int cpt = 0;
-  if (Mode == MODE_BT) {
-    canvas.drawString("ADS1", 10, 0);
-    canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 60);
-    canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 110);
-    canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 150);
-    canvas.drawString("ADS2", 10, 210);
-    canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 260);
-    canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 300);
+void rectangle2() {
+  canvas.drawRect(7, 390, 420, 100, 15);
+}
 
-    canvas.drawString("Life CPT: " + String(cpt++), 10, 360);
-    canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
-    delay(20);  // Ajout d'un délai
-  }
-  // SerialBT.println('@');
-  //Serial.println('@');
+// SerialBT.println('@');
+//Serial.println('@');
 
-  if (M5.TP.available()) {
+/*if (M5.TP.available()) {
     if (!M5.TP.isFingerUp()) {
       M5.TP.update();
       canvas.fillCanvas(0);
@@ -187,8 +237,4 @@ void loop() {
         canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       }
     }
-  }
-}
-void rectangle2() {
-  canvas.drawRect(7, 390, 420, 100, 15);
-}
+  }*/
