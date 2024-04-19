@@ -83,6 +83,7 @@ void IRAM_ATTR onTimer(void *param) {
 
   for (char cptSend = 0; cptSend < NB_data; cptSend++) {
     SerialBT.print(sendtab[cptSend]);
+
 #ifdef debug_ADC
     Serial.println(sendtab[cptSend]);
 #endif
@@ -93,8 +94,9 @@ void setup() {
 
   delay(1000);
   M5.begin();
+
   //#ifdef USE_bluetooth
-  //init_bluetooth();
+  init_bluetooth();
   //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
   init_screen(90, 90, 540, 960, 5);
@@ -166,6 +168,7 @@ void loop() {
       }
       break;
     case MODE_BT:
+    SerialBT.print("A");
       canvas.clear();
       canvas.setTextSize(3);
       canvas.drawString("Welcom to Bluetooth mode", 10, 50);
