@@ -15,7 +15,6 @@
 
 //********************************Constante**********************************
 #define NB_data 7
-int point[2][2];
 //#define debug_ADC
 #define PIN_G33 33
 
@@ -25,6 +24,7 @@ int point[2][2];
 
 //********************************Variable***********************************
 char sendtab[NB_data];
+
 int16_t adc0, adc1, adc2;
 int16_t adc6, adc7;  //   _t:
 int point2[2][2];
@@ -41,6 +41,41 @@ esp_timer_handle_t timer;
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
+  //*******************modid porte ouverte****************************
+  static char ADC1[10] = { 245, 245, 245, 245, 245, 245, 245, 245, 245, 245 };
+  static char indice = 9;  // dernier indice
+
+  indice++;
+  if (indice >= 10)
+    indice = 0;
+  adc1 = ads1.readVoltage(1);
+  Serial.printf("A11:%5d ", adc1 / 25);
+
+  ADC1[indice] = char(adc1 / 25);
+
+  int somme = 0;
+
+
+  for (int i = 0; i < 10; i++) {
+    somme += ADC1[i];
+  }
+  int moyenne = somme / 10;
+  Serial.print(moyenne);
+
+
+  /*ADC1[0] = char(adc1 / 25);
+  ADC1[1] = char(adc1 / 25);  //les données doivent être placé ici ...
+  ADC1[2] = char(adc1 / 25);  // /25 car pas besoin de 6123 positions.
+  ADC1[3] = char(adc1 / 25);
+  ADC1[4] = char(adc1 / 25);
+  ADC1[5] = char(adc1 / 25);
+  ADC1[6] = char(adc1 / 25);
+  ADC1[7] = char(adc1 / 25);
+  ADC1[8] = char(adc1 / 25);
+  ADC1[9] = char(adc1 / 25);
+  ADC1[10] = char(adc1 / 25);*/
+
+
 
   static unsigned int cpt = 0;
   //C'est ici que tu écris ce que tu veux qui arrive toutes les 50ms
@@ -74,7 +109,7 @@ void IRAM_ATTR onTimer(void *param) {
 
   sendtab[0] = '#';
   sendtab[1] = char(255 - adc0 / 25);  //les données doivent être placé ici ...
-  sendtab[2] = char(adc1 / 25);        // /25 car pas besoin de 6123 positions.
+  sendtab[2] = char(moyenne);        // /25 car pas besoin de 6123 positions.
   sendtab[3] = char(adc2 / 25);
   sendtab[4] = char(adc6 / 25);
   sendtab[5] = char(adc7 / 25);
@@ -168,7 +203,7 @@ void loop() {
       }
       break;
     case MODE_BT:
-    SerialBT.print("A");
+      SerialBT.print("A");
       canvas.clear();
       canvas.setTextSize(3);
       canvas.drawString("Welcom to Bluetooth mode", 10, 50);
@@ -184,7 +219,7 @@ void loop() {
 
       canvas.drawString("Life CPT: " + String(cpt++), 10, 560);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
-      delay(20);  // Ajout d'un délai
+      delay(20);                                           // Ajout d'un délai
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
           M5.TP.update();                                  // Met à jour les informations du pavé tactile
