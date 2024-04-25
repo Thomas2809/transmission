@@ -26,7 +26,7 @@
 char sendtab[NB_data];
 
 int16_t adc0, adc1, adc2;
-int16_t adc6, adc7;  //   _t:
+int16_t adc6, adc7;  
 int point2[2][2];
 byte Mode = MODE_MENU;
 bool inOptionsMenu = false;
@@ -62,21 +62,6 @@ void IRAM_ATTR onTimer(void *param) {
   int moyenne = somme / 10;
   Serial.print(moyenne);
 
-
-  /*ADC1[0] = char(adc1 / 25);
-  ADC1[1] = char(adc1 / 25);  //les données doivent être placé ici ...
-  ADC1[2] = char(adc1 / 25);  // /25 car pas besoin de 6123 positions.
-  ADC1[3] = char(adc1 / 25);
-  ADC1[4] = char(adc1 / 25);
-  ADC1[5] = char(adc1 / 25);
-  ADC1[6] = char(adc1 / 25);
-  ADC1[7] = char(adc1 / 25);
-  ADC1[8] = char(adc1 / 25);
-  ADC1[9] = char(adc1 / 25);
-  ADC1[10] = char(adc1 / 25);*/
-
-
-
   static unsigned int cpt = 0;
   //C'est ici que tu écris ce que tu veux qui arrive toutes les 50ms
   Serial.printf("%d-> ", cpt++);  // incrémante le compteurs
@@ -109,7 +94,7 @@ void IRAM_ATTR onTimer(void *param) {
 
   sendtab[0] = '#';
   sendtab[1] = char(255 - adc0 / 25);  //les données doivent être placé ici ...
-  sendtab[2] = char(moyenne);        // /25 car pas besoin de 6123 positions.
+  sendtab[2] = char(moyenne);          // /25 car pas besoin de 6123 positions.
   sendtab[3] = char(adc2 / 25);
   sendtab[4] = char(adc6 / 25);
   sendtab[5] = char(adc7 / 25);
@@ -156,7 +141,7 @@ void loop() {
       canvas.setTextSize(5);
       canvas.drawString("Choisissez le mode", 10, 100);
       canvas.drawString("Mode BT", 10, 200);
-      canvas.drawString("Mode Auto", 10, 400);
+      canvas.drawString("Mode Manuel", 10, 400);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
@@ -166,7 +151,7 @@ void loop() {
             if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
               // Vérifie si le toucher est dans la zone définie
               if (!inOptionsMenu) {
-                if (FingerItem.y< 230 & FingerItem.y > 180) {
+                if (FingerItem.y< 240 & FingerItem.y > 180) {
                   Mode = MODE_BT;
                 } else if (FingerItem.y< 440 & FingerItem.y> 380) {
                   Mode = MODE_MANUEL;
@@ -193,7 +178,7 @@ void loop() {
               if (!inOptionsMenu) {
                 Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y< 830 & FingerItem.y > 780) {
+                if (FingerItem.y< 850 & FingerItem.y > 780) {
                   Mode = MODE_MENU;
                 }
               }
@@ -203,7 +188,7 @@ void loop() {
       }
       break;
     case MODE_BT:
-      SerialBT.print("A");
+      SerialBT.print("$");
       canvas.clear();
       canvas.setTextSize(3);
       canvas.drawString("Welcom to Bluetooth mode", 10, 50);
@@ -230,7 +215,7 @@ void loop() {
               if (!inOptionsMenu) {
                 Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y< 830 & FingerItem.y > 780) {
+                if (FingerItem.y< 850 & FingerItem.y > 780) {
                   Mode = MODE_MENU;
                 }
               }

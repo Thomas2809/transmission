@@ -22,21 +22,21 @@ void init_bluetooth() {
 
   SerialBT.begin(myName, true);
 
-  Serial.printf("The device \"%s\" started in master mode, make sure slave BT device is on!\n", myName.c_str());
+  Serial.printf("The device \"%s\" démarré en mode maître, assurez-vous que le périphérique BT esclave est allumé !\n", myName.c_str());
   SerialBT.setPin(pin);
-  Serial.println("Using PIN");
+  Serial.println("Pin utilisé");
 
   // connect(address) is fast (up to 10 secs max), connect(slaveName) is slow (up to 30 secs max) as it needs
   // to resolve slaveName to address first, but it allows to connect to different devices with the same name.
   // Set CoreDebugLevel to Info to view devices Bluetooth address and device names
   connected = SerialBT.connect(slaveName);
-  Serial.printf("Connecting to slave BT device named \"%s\"\n", slaveName.c_str());
+  Serial.printf("Connexion au périphérique BT esclave nommé \"%s\"\n", slaveName.c_str());
   if (connected) {
-    Serial.println("Connected Successfully!");
+    Serial.println("Connexion réussi!");
   } else {
 
     while (!SerialBT.connected(10000)) {
-      Serial.println("Failed to connect. Make sure remote device is available and in range, then restart app.");
+      Serial.println("Échec de connexion. Assurez-vous que l'appareil distant est disponible et à portée, puis redémarrez l'application.");
     }
   }
 
