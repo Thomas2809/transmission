@@ -27,4 +27,4 @@ Un PCB sur le quel on retrouve des polyswitch (fusible réarmable), des résista
 
 ## Shéma de principe de la main robotique:
 
-
+![image](https://github.com/Thomas2809/transmission/assets/166612110/f287c5ec-5f95-4404-a984-d1d4d119d3c0)
