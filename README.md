@@ -31,4 +31,4 @@ Un PCB sur le quel on retrouve des polyswitch (fusible réarmable), des résista
 
 ## Schéma de principe du gant 
 
-![image](https://github.com/Thomas2809/transmission/assets/166612110/b080b620-c5c2-40fc-93ed-c7497e51e8da)
+![image](https://github.com/Thomas2809/transmission/assets/166612110/871961bf-d687-4467-b82b-87e8691f70f7)
