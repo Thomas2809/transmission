@@ -24,7 +24,7 @@ Une main robotique
 Des encodeurs 
 Des capteurs de flexion 
 Module ADS1115 
-Un PCB sur le quel on retrouve des polyswitch (fusible réarmable), des résistanceq de 220 ohm, un intérupteur pour éteindre les servos moteurs et des connecteurs pour les servos et l'encodeur.
+Un PCB sur lequel on retrouve des polyswitches (fusibles réarmables), des résistances de 220 ohm, un interrupteur pour éteindre les servomoteurs et des connecteurs pour les servos et l'encodeur.
 
 # Caractéristiques électroniques
 
@@ -33,18 +33,18 @@ Un PCB sur le quel on retrouve des polyswitch (fusible réarmable), des résista
 • Contrôlée en Bluetooth (2,4GHz) via une Feather (ESP32)
 • Autonomie à déterminer en fonction de la batterie
 • 300 mA/doigts 
-• Tension de fonctionnement des servos moteurs : de 5 à 6 V
-• Protocole de contrôle : 0,5ms à 2,5ms pour des servos moteurs 180°
+• Tension de fonctionnement des servomoteurs: de 5 à 6 V
+• Protocole de contrôle : 0,5ms à 2,5ms pour des servomoteurs 180°
 ## Gant :
-• Alimenté en 5V DC
-• 5 capteurs de flexion commandés en 5V DC
+• Alimenté en 5VDC
+• 5 capteurs de flexion commandés en 5VDC
 • Autonomie +- 4h20
 • Consommation 1150mAh
 • Contrôlé en Bluetooth (2,4GHz) via une Feather 
 
-# Bibliothèque nécessaire
+# Bibliothèques nécessaires
 
-Bibliothèque utilisée pour les servos moteurs : 
+Bibliothèque utilisée pour les servomoteurs : 
 •	https://github.com/jkb-git/ESP32Servo
 
 Bibliothèque utilisée pour le m5rotate: 
