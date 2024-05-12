@@ -50,7 +50,7 @@ Bibliothèque utilisée pour le M5EPD:
 
  Bibliothèque utilisée pour le Bluetooth : 
 •	https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
-
+![image](https://github.com/Thomas2809/transmission/assets/166612110/fe17a084-6ac5-4c50-b594-2b47818826e0)
 
 
 
