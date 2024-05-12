@@ -9,7 +9,7 @@
 Mon projet ce compose en deux parties:
 
 La première partie concernée est le gant Bluetooth. 
-Dans ce gant on retrouvve 5 capteurs de flexion (flex sensor) qui sont connectés en série à une résistance de 8k2Ω. Ces cinq résistances sont soudées sur deux cartes ADS qui sont reliées ensemble. 
+Dans ce gant on retrouvve 5 capteurs de flexion (flex sensor) qui sont connectés en série à une résistance de 8k2Ω. Ces cinq résistances sont soudées sur deux cartes ADS qui sont reliées l'une à l'autre. 
 L’ensemble est attaché à mon bras à l’aide de deux pièces 3D que j’ai personnellement dessinées en 3D et imprimées avec mon imprimante 3D. 
 
 La deuxième partie, nous avons une main robotisée qui contient 5 servos moteurs. 
