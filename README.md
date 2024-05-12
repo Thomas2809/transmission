@@ -55,6 +55,6 @@ Bibliothèque utilisée pour le M5EPD:
 
 ## Shéma de principe du PCB
 
-![image](https://github.com/Thomas2809/transmission/assets/166612110/a511f603-2224-42eb-bc45-78e67e8268c5)
+![image](https://github.com/Thomas2809/transmission/assets/166612110/dc9f3010-8443-4624-9af7-7b6f889948df)
 
 
