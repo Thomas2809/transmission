@@ -26,16 +26,7 @@ Des capteurs de flexion
 Module ADS1115 
 Un PCB sur le quel on retrouve des polyswitch (fusible réarmable), des résistanceq de 220 ohm, un intérupteur pour éteindre les servos moteurs et des connecteurs pour les servos et l'encodeur.
 
-# Partie mécanique
-
-## Shéma de principe de la main robotique   
-
-![image](https://github.com/Thomas2809/transmission/assets/166612110/11a5ead6-651d-49cb-8e9f-05609cc512b8)              
-
-## Schéma de principe du gant 
-
- ![image](https://github.com/Thomas2809/transmission/assets/166612110/93310c57-e7f2-4853-92e2-c30dc33eae3a)
-# Librairie nécessaire
+# Bibliothèque nécessaire
 
 Bibliothèque utilisée pour les servos moteurs : 
 •	https://github.com/jkb-git/ESP32Servo
@@ -51,6 +42,17 @@ Bibliothèque utilisée pour le M5EPD:
 
  Bibliothèque utilisée pour le Bluetooth : 
 •	https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
+
+# Partie mécanique
+
+## Shéma de principe de la main robotique   
+
+![image](https://github.com/Thomas2809/transmission/assets/166612110/11a5ead6-651d-49cb-8e9f-05609cc512b8)              
+
+## Schéma de principe du gant 
+
+ ![image](https://github.com/Thomas2809/transmission/assets/166612110/93310c57-e7f2-4853-92e2-c30dc33eae3a)
+
 
 
 
