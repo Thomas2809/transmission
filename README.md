@@ -45,13 +45,14 @@ Bibliothèque utilisée pour le M5EPD:
 
 # Partie mécanique
 
+## Schéma de principe du gant 
+
+![image](https://github.com/Thomas2809/transmission/assets/166612110/93310c57-e7f2-4853-92e2-c30dc33eae3a)
+
 ## Shéma de principe de la main robotique   
 
 ![image](https://github.com/Thomas2809/transmission/assets/166612110/11a5ead6-651d-49cb-8e9f-05609cc512b8)              
 
-## Schéma de principe du gant 
-
- ![image](https://github.com/Thomas2809/transmission/assets/166612110/93310c57-e7f2-4853-92e2-c30dc33eae3a)
 
 ## Shéma de principe du PCB
 
