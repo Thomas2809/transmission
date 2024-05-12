@@ -4,6 +4,7 @@
 
  ## Introduction
  Comme projet de fin d’études, j’ai décidé de créer une main robotique controle à distance. 
+ Ce projet peut être utile dans le domaine chirurgical ou si il s'agit de manipuler des matières phosphorescente par exemple.
  
 Mon projet ce compose en deux parties:
 
