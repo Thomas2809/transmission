@@ -29,35 +29,35 @@ A l’entrée de la carte ESP32, il y a également 8 encodeurs qui me permettent
 # Caractéristiques électroniques
 
 ## Main :
-• Alimentée en 5Vdc
-• Contrôlée en Bluetooth (2,4GHz) via une Feather (ESP32)
-• Autonomie à déterminer en fonction de la batterie
-• 300 mA/doigts 
-• Tension de fonctionnement des servomoteurs: de 5 à 6 V
-• Protocole de contrôle : 0,5ms à 2,5ms pour des servomoteurs 180°
+- Alimentée en 5Vdc
+- Contrôlée en Bluetooth (2,4GHz) via une Feather (ESP32)
+- Autonomie à déterminer en fonction de la batterie
+- 300 mA/doigts 
+- Tension de fonctionnement des servomoteurs: de 5 à 6 V
+- Protocole de contrôle : 0,5ms à 2,5ms pour des servomoteurs 180°
 ## Gant :
-• Alimenté en 5VDC
-• 5 capteurs de flexion commandés en 5VDC
-• Autonomie +- 4h20
-• Consommation 1150mAh
-• Contrôlé en Bluetooth (2,4GHz) via une Feather 
+- Alimenté en 5VDC
+- 5 capteurs de flexion commandés en 5VDC
+- Autonomie +- 4h20
+- Consommation 1150mAh
+- Contrôlé en Bluetooth (2,4GHz) via une Feather 
 
 # Bibliothèques nécessaires
 
 Bibliothèque utilisée pour les servomoteurs : 
-•	https://github.com/jkb-git/ESP32Servo
+-	https://github.com/jkb-git/ESP32Servo
 
 Bibliothèque utilisée pour le m5rotate: 
-•	https://github.com/RobTillaart/M5ROTATE8
+-	https://github.com/RobTillaart/M5ROTATE8
 
 Bibliothèque utilisée pour les ADC: 
-•	https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h
+-	https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h
 
 Bibliothèque utilisée pour le M5EPD: 
-•	https://github.com/m5stack/M5EPD 
+-	https://github.com/m5stack/M5EPD 
 
  Bibliothèque utilisée pour le Bluetooth : 
-•	https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
+-	https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
 
 # Partie mécanique
 
