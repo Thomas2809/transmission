@@ -18,13 +18,13 @@ A l’entrée de la carte ESP32, il y a également 8 encodeurs qui me permettent
 
 ## Tout le matériel nécessaire pour réaliser le projet
 
-Une feather ESP32
-Une M5STACK PAPER
-Une main robotique 
-Des encodeurs 
-Des capteurs de flexion 
-Module ADS1115 
-Un PCB sur lequel on retrouve des polyswitches (fusibles réarmables), des résistances de 220 ohm, un interrupteur pour éteindre les servomoteurs et des connecteurs pour les servos et l'encodeur.
+. Une feather ESP32
+. Une M5STACK PAPER
+. Une main robotique 
+. Des encodeurs 
+. Des capteurs de flexion 
+. Module ADS1115 
+. Un PCB sur lequel on retrouve des polyswitches (fusibles réarmables), des résistances de 220 ohm, un interrupteur pour éteindre les servomoteurs et des connecteurs pour les servos et l'encodeur.
 
 # Caractéristiques électroniques
 
