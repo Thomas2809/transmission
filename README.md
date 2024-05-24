@@ -79,4 +79,4 @@ Bibliothèque utilisée pour le M5EPD:
 
 ## Schéma bloc de la main robotisée
 
-
+![image](https://github.com/Thomas2809/transmission/assets/166612110/3fe65ea3-31b4-4b9d-a606-61c25c475a2b)
