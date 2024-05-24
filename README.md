@@ -69,8 +69,14 @@ Bibliothèque utilisée pour le M5EPD:
 
 ![image](https://github.com/Thomas2809/transmission/assets/166612110/11a5ead6-651d-49cb-8e9f-05609cc512b8)              
 
-
 ## Shéma de principe du PCB
 
 ![image](https://github.com/Thomas2809/transmission/assets/166612110/70e799e9-662f-41b8-b150-6f8a6a61cec8)
+
+## Schéma bloc du gant
+
+![image](https://github.com/Thomas2809/transmission/assets/166612110/563deee5-c57e-43f0-a7b9-ecd2851ca234)
+
+## Schéma bloc de la main robotisée
+
 
