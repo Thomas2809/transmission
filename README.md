@@ -16,15 +16,15 @@ La deuxième partie est constituée d'une main robotisée qui contient 5 servos 
 Ceux-ci sont reliés à un microcontrôleur ESP32 en Bluetooth qui va récupèrer les informations nécessaires pour faire fonctionner la main.
 A l’entrée de la carte ESP32, il y a également 8 encodeurs qui me permettent de faire lever ou abaisser les doigts de la même façon que le gant. 
 
-## Tout le matériel nécessaire pour réaliser le projet
+## Liste des composants
 
-. Une feather ESP32
-. Une M5STACK PAPER
-. Une main robotique 
-. Des encodeurs 
-. Des capteurs de flexion 
-. Module ADS1115 
-. Un PCB sur lequel on retrouve des polyswitches (fusibles réarmables), des résistances de 220 ohm, un interrupteur pour éteindre les servomoteurs et des connecteurs pour les servos et l'encodeur.
+- Une feather ESP32
+- Une M5STACK PAPER
+- Une main robotique 
+- Des encodeurs 
+- Des capteurs de flexion 
+- Module ADS1115 
+- Un PCB sur lequel on retrouve des polyswitches (fusibles réarmables), des résistances de 220 ohm, un interrupteur pour éteindre les servomoteurs et des connecteurs pour les servos et l'encodeur.
 
 # Caractéristiques électroniques
 
