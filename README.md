@@ -44,20 +44,15 @@ A l’entrée de la carte ESP32, il y a également 8 encodeurs qui me permettent
 
 # Bibliothèques nécessaires
 
-Bibliothèque utilisée pour les servomoteurs : 
--	https://github.com/jkb-git/ESP32Servo
+-	[Bibliothèque pour les servomoteurs : ](https://github.com/jkb-git/ESP32Servo)
 
-Bibliothèque utilisée pour le m5rotate: 
--	https://github.com/RobTillaart/M5ROTATE8
+-	[Bibliothèque pour le m5rotate des encodeurs: ](https://github.com/RobTillaart/M5ROTATE8)
 
-Bibliothèque utilisée pour les ADC: 
--	https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h
+-	[Bibliothèque pour les ADC: ](https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h)
 
-Bibliothèque utilisée pour le M5EPD: 
--	https://github.com/m5stack/M5EPD 
-
- Bibliothèque utilisée pour le Bluetooth : 
--	https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
+- [Bibliothèque pour le M5EPD](https://github.com/m5stack/M5EPD) 
+ 
+-	[ Bibliothèque pour le Bluetooth](https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/)
 
 # Partie mécanique
 
