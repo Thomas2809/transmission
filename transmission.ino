@@ -1,10 +1,10 @@
 //***************************************************************************
 // transmission.ino
-// Main_Robotisé
-// Oulad El Fadel Daoud
+// Main_Robotique
+// Giarrizzo Thomas
 // 6 ème électronique Inraci
 // Hardwarde: Arduino_feather_ESP32, M5Stack_Paper, Adc1115(I2C), Servomoteurs, capteur_de_fexion_ZD10-100,
-// 26 mai 2024
+// 18 mars 2024
 
 
 //*********************************Librairie*********************************
@@ -69,10 +69,10 @@ void IRAM_ATTR onTimer(void *param) {
     }
     sendtab[0] = '#';
     sendtab[1] = char(255 - adc0 / 25);  //les données doivent être placées ici ...
-    sendtab[2] = char(adc1 / 25);        // /25 car pas besoin de 6123 positions.
-    sendtab[3] = char(adc2 / 25);
-    sendtab[4] = char(adc6 / 25);
-    sendtab[5] = char(adc7 / 25);
+    sendtab[2] = char(255 - adc1 / 25);        // /25 car pas besoin de 6123 positions.
+    sendtab[3] = char(255 - adc2 / 25);
+    sendtab[4] = char(255 - adc6 / 25);
+    sendtab[5] = char(255 - adc7 / 25);
     sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
     for (char cptSend = 0; cptSend < NB_data; cptSend++) {      
     SerialBT.print(sendtab[cptSend]);
@@ -171,7 +171,7 @@ void loop() {
       canvas.clear();
       canvas.setTextSize(4);
       canvas.drawString("Bienvenue dans le mode manuel", 10, 100);
-      canvas.drawString("Retour", 750, 400);
+      canvas.drawString("Retour", 750, 300);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
@@ -183,7 +183,7 @@ void loop() {
               if (!inOptionsMenu) {
                 Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y < 440 && FingerItem.y > 380) {
+                if (FingerItem.y < 340 && FingerItem.y > 280) {
                   Mode = MODE_MENU;
                 }
               }
@@ -197,7 +197,7 @@ void loop() {
   canvas.clear();
   canvas.setTextSize(4);
   canvas.drawString("Bienvenue dans le mode Bluetooth", 10, 50);
-  canvas.drawString("Retour", 750, 400);
+  canvas.drawString("Retour", 750, 300);
   static int cpt = 0;
   canvas.drawString("ADS1", 10, 130);
   canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 170);
@@ -220,7 +220,7 @@ void loop() {
           if (!inOptionsMenu) {
             Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-            if (FingerItem.y < 440 && FingerItem.y > 380) {
+            if (FingerItem.y < 340 && FingerItem.y > 280) {
               Mode = MODE_MENU;
             }
           }
