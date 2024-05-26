@@ -1,6 +1,8 @@
 # La main robotique
 
 ## transmission_gant_main
+## Démonstration du projet
+
 ## Table des matières
 - [Introduction](#introduction)
 - [Liste des composants](#liste-des-composants)
