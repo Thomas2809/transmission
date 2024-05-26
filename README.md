@@ -6,9 +6,9 @@ https://github.com/Thomas2809/transmission/assets/166612110/041ae254-5347-47f5-9
 ## Table des matières
 - [Introduction](#introduction)
 - [Liste des composants](#liste-des-composants)
-  - [Electronique](#electronique)
+  - [Electronique1](#electronique)
 - [Les caractéristiques](#les-caractéristiques)
-  - [Electronique](#electronique)
+  - [Electronique2](#electronique)
 - [Bibliothèques nécessaires](#Bibliothèques-nécessaires)
 - [Partie mécanique](#Partie-mécanique)
    - [Schéma de principe du gant](#Schéma-de-principe-du-gant )
