@@ -1,4 +1,12 @@
-//daoud
+//***************************************************************************
+// transmission.ino
+// Main_Robotisé
+// Oulad El Fadel Daoud
+// 6 ème électronique Inraci
+// Hardwarde: Arduino_feather_ESP32, M5Stack_Paper, Adc1115(I2C), Servomoteurs, capteur_de_fexion_ZD10-100,
+// 26 mai 2024
+
+
 //*********************************Librairie*********************************
 
 #include "BluetoothSerial.h"
@@ -16,8 +24,8 @@
 
 //********************************Variable***********************************
 char sendtab[NB_data];
-int16_t adc0, adc6, adc7;
-int16_t adc1, adc2;
+int16_t adc0, adc1, adc2;
+int16_t adc6, adc7;
 int point2[2][2];
 byte Mode = MODE_MENU;
 bool inOptionsMenu = false;
@@ -33,74 +41,75 @@ esp_timer_handle_t timer;
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
+ 
+ if (Mode == MODE_BT) {
+    if (ads2.checkADS1115()) {  // gère les données du deuxième module
 
-if (Mode == MODE_BT) {
-  if (ads2.checkADS1115()) {  // gère les données du deuxième module
+      adc7 = ads2.readVoltage(3);
+      Serial.printf("A03:%5d ", adc7 / 25);
 
+      adc6 = ads2.readVoltage(0);
+      Serial.printf("A02:%5d ", adc6 / 25);
+    } else {
+      Serial.println("ADS1115-gauche Disconnected!");
+    }
 
-    adc0 = ads2.readVoltage(3);
-    Serial.printf("A03:%5d ", adc0 / 25);
+    if (ads1.checkADS1115()) {  // gère les données du premier module
 
-    adc1 = ads2.readVoltage(2);
-    Serial.printf("A02:%5d ", adc1 / 25);
-  } else {
-    Serial.println("ADS1115-gauche Disconnected!");
-  }
-
-  if (ads1.checkADS1115()) {  // gère les données du premier module
-
-    adc2 = ads1.readVoltage(2);
-    Serial.printf("A12:%5d ", adc2 / 25);
-    //digitalWrite(PIN_G33, HIGH); //1
-    adc7 = ads1.readVoltage(1);
-    Serial.printf("A11:%5d ", adc7 / 25);
-    //digitalWrite(PIN_G33, LOW); //0
-    adc6 = ads1.readVoltage(0);
-    Serial.printf("A10:%5d \n", 255 - adc6 / 25);
-  } else {
-    Serial.println("ADS1115-droite Disconnected!");
-  }
-  sendtab[0] = '#';
-  sendtab[1] = char(adc0 / 25);  //les données doivent être placées ici ...
-  sendtab[2] = char(adc1 / 25);        // /25 car pas besoin de 6123 positions.
-  sendtab[3] = char(adc2 / 25);
-  sendtab[4] = char(adc6 / 25);
-  sendtab[5] = char(adc7 / 25);
-  sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
-  for (char cptSend = 0; cptSend < NB_data; cptSend++) {
+      adc2 = ads1.readVoltage(3);
+      Serial.printf("A12:%5d ", adc2 / 25);
+      //digitalWrite(PIN_G33, HIGH); //1
+      adc1 = ads1.readVoltage(1);
+      Serial.printf("A11:%5d ", adc1 / 25);
+      //digitalWrite(PIN_G33, LOW); //0
+      adc0 = ads1.readVoltage(0);
+      Serial.printf("A10:%5d \n", 255 - adc0 / 25);
+    } else {
+      Serial.println("ADS1115-droite Disconnected!");
+    }
+    sendtab[0] = '#';
+    sendtab[1] = char(255 - adc0 / 25);  //les données doivent être placées ici ...
+    sendtab[2] = char(adc1 / 25);        // /25 car pas besoin de 6123 positions.
+    sendtab[3] = char(adc2 / 25);
+    sendtab[4] = char(adc6 / 25);
+    sendtab[5] = char(adc7 / 25);
+    sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
+    for (char cptSend = 0; cptSend < NB_data; cptSend++) {      
     SerialBT.print(sendtab[cptSend]);
 
 #ifdef debug_ADC
-    Serial.println(sendtab[cptSend]);
+      Serial.println(sendtab[cptSend]);
 #endif
+    }
   }
-}
-if (Mode == MODE_MENU) {
-  sendtab[0] = '-';
-  sendtab[1] = 0;
-  sendtab[2] = 0;
-  sendtab[3] = 0;
-  sendtab[4] = 0;
-  sendtab[5] = 0;
-  sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
-  for (char cptSend = 0; cptSend < NB_data; cptSend++) {
-    SerialBT.print(sendtab[cptSend]);
-  }
-}
-if (Mode == MODE_MANUEL) {
 
-  sendtab[0] = '&';
-  sendtab[1] = 0;
-  sendtab[2] = 0;
-  sendtab[3] = 0;
-  sendtab[4] = 0;
-  sendtab[5] = 0;
-  sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
-
-  for (char cptSend = 0; cptSend < NB_data; cptSend++) {
+    if(Mode== MODE_MENU){
+    sendtab[0] = '&';
+    sendtab[1] = 0;
+    sendtab[2] = 0;       
+    sendtab[3] = 0;
+    sendtab[4] = 0;
+    sendtab[5] = 0;
+    sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
+for (char cptSend = 0; cptSend < NB_data; cptSend++) {      
     SerialBT.print(sendtab[cptSend]);
-  }
+    }
+    }
+        if(Mode== MODE_MANUEL){
+
+    sendtab[0] = '@';
+    sendtab[1] = 0;
+    sendtab[2] = 0;       
+    sendtab[3] = 0;
+    sendtab[4] = 0;
+    sendtab[5] = 0;
+    sendtab[6] = sendtab[1] ^ sendtab[2] ^ sendtab[3] ^ sendtab[4] ^ sendtab[5];  //byte de controle d'intégrité de donnée
+
+for (char cptSend = 0; cptSend < NB_data; cptSend++) {      
+    SerialBT.print(sendtab[cptSend]);
 }
+}
+   
 }
 //*******************************Initialisation**************************************
 void setup() {
@@ -112,7 +121,7 @@ void setup() {
   init_bluetooth();
   //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
-  init_screen(90, 90, 540, 960, 5);
+  init_screen(180, 180, 960, 540, 2);
   init_ads1();
   init_ads2();
   //************* Configuration de l'interruption du timer ************
@@ -130,9 +139,10 @@ void loop() {
   //canvas.drawString("le mode ", Menu, 20, 400);
   switch (Mode) {
     case MODE_MENU:
+      //SerialBT.print("E");
       canvas.clear();
-      canvas.setTextSize(5);
-      canvas.drawString("Daoud Oulad El Fadel", 10, 0);
+      canvas.setTextSize(4);
+      canvas.drawString("Bienvenue sur le module de transmission", 10, 0);
       canvas.drawString("Choisissez le mode", 10, 100);
       canvas.drawString("Mode BT", 10, 200);
       canvas.drawString("Mode Manuel", 10, 400);
@@ -142,14 +152,14 @@ void loop() {
           M5.TP.update();                                  // Met à jour les informations du pavé tactile
           for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
             tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+            if ((FingerItem.x > 0 && FingerItem.x < 960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
               // Vérifie si le toucher est dans la zone définie
               if (!inOptionsMenu) {
                 if (FingerItem.y < 240 && FingerItem.y > 180) {
                   Mode = MODE_BT;
                 } else if (FingerItem.y < 440 && FingerItem.y > 380) {
                   Mode = MODE_MANUEL;
-                }
+                } 
               }
             }
           }
@@ -159,21 +169,21 @@ void loop() {
     case MODE_MANUEL:
       //SerialBT.print("&");
       canvas.clear();
-      canvas.setTextSize(3);
-      canvas.drawString("Welcom to manuel mode", 10, 100);
-      canvas.drawString("Retour", 400, 800);
+      canvas.setTextSize(4);
+      canvas.drawString("Bienvenue dans le mode manuel", 10, 100);
+      canvas.drawString("Retour", 750, 400);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
           M5.TP.update();                                  // Met à jour les informations du pavé tactile
           for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
-            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigtz
+            if ((FingerItem.x > 0 && FingerItem.x < 960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
               // Vérifie si le toucher est dans la zone définie
               if (!inOptionsMenu) {
                 Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y < 850 && FingerItem.y > 780) {
+                if (FingerItem.y < 440 && FingerItem.y > 380) {
                   Mode = MODE_MENU;
                 }
               }
@@ -183,44 +193,42 @@ void loop() {
       }
       break;
     case MODE_BT:
-      canvas.clear();
-      canvas.setTextSize(3);
-      canvas.drawString("Welcom to Bluetooth mode", 10, 50);
-      canvas.drawString("Retour", 400, 800);
-      static int cpt = 0;
-      canvas.drawString("ADS1", 10, 130);
-      canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 160);
-      canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 210);
-      canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 250);
-      canvas.drawString("ADS2", 10, 310);
-      canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 360);
-      canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 400);
+      //SerialBT.print("$");
+  canvas.clear();
+  canvas.setTextSize(4);
+  canvas.drawString("Bienvenue dans le mode Bluetooth", 10, 50);
+  canvas.drawString("Retour", 750, 400);
+  static int cpt = 0;
+  canvas.drawString("ADS1", 10, 130);
+  canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 170);
+  canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 210);
+  canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 250);
+  canvas.drawString("ADS2", 10, 310);
+  canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 360);
+  canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 400);
 
-      canvas.drawString("Life CPT: " + String(cpt++), 10, 560);
-      canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
-      delay(20);                                           // Ajout d'un délai
-      if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
-        if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
-          M5.TP.update();                                  // Met à jour les informations du pavé tactile
-          for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
-            tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
-              // Vérifie si le toucher est dans la zone définie
-              if (!inOptionsMenu) {
-                Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
+  canvas.drawString("Life CPT: " + String(cpt++), 10, 560);
+  canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
+  delay(20);                                           // Ajout d'un délai
+  if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
+    if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
+      M5.TP.update();                                  // Met à jour les informations du pavé tactile
+      for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
+        tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
+        if ((FingerItem.x > 0 && FingerItem.x < 960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
+          // Vérifie si le toucher est dans la zone définie
+          if (!inOptionsMenu) {
+            Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y < 850 && FingerItem.y > 780) {
-                  Mode = MODE_MENU;
-                }
-              }
+            if (FingerItem.y < 440 && FingerItem.y > 380) {
+              Mode = MODE_MENU;
             }
           }
         }
       }
-      break;
+    }
   }
+  break;
+ 
 }
-
-void rectangle2() {
-  canvas.drawRect(7, 390, 420, 100, 15);
 }
