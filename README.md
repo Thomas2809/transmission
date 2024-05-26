@@ -1,7 +1,22 @@
 # La main robotique
 
 ## transmission_gant_main
+## Table des matières
+- [Introduction](#introduction)
+- [Liste des composants](#liste-des-composants)
+  - [Electronique](#electronique)
+- [Les caractéristiques](#les-caractéristiques)
+  - [Electronique](#electronique)
+- [Bibliothèques nécessaires](#Bibliothèques-nécessaires)
+- [Partie mécanique](#Partie-mécanique)
+   - [Schéma de principe du gant](#Schéma-de-principe-du-gant )
+   - [Schéma de principe de la main robotique ](#Schéma-de-principe-de-la-main-robotique )
+   - [Shéma de principe du PCB](#Schéma-de-principe-du-PCB )
+- [Schéma bloc](#schéma-bloc)      
+  - [Gant](#gant)
+  - [Main](#main)
 
+- [Fichier sources easyEDA](#pcb)
  ## Introduction
  Comme projet de fin d’études, j’ai décidé de créer une main robotique controlée à distance. 
  Ce projet peut être utile dans le domaine chirurgical ou si il s'agit de manipuler des matières phosphorescentes par exemple.
