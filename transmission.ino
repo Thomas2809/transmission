@@ -84,7 +84,7 @@ void IRAM_ATTR onTimer(void *param) {
   }
 
     if(Mode== MODE_MENU){
-    sendtab[0] = '&';
+    sendtab[0] = '-';
     sendtab[1] = 0;
     sendtab[2] = 0;       
     sendtab[3] = 0;
@@ -97,7 +97,7 @@ for (char cptSend = 0; cptSend < NB_data; cptSend++) {
     }
         if(Mode== MODE_MANUEL){
 
-    sendtab[0] = '@';
+    sendtab[0] = '&';
     sendtab[1] = 0;
     sendtab[2] = 0;       
     sendtab[3] = 0;
@@ -201,11 +201,11 @@ void loop() {
   static int cpt = 0;
   canvas.drawString("ADS1", 10, 130);
   canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 170);
-  canvas.drawString("A1: " + String(adc1 / 25) + "mV", 10, 210);
-  canvas.drawString("A2: " + String(adc2 / 25) + "mV", 10, 250);
+  canvas.drawString("A1: " + String(255 - adc1 / 25) + "mV", 10, 210);
+  canvas.drawString("A2: " + String(255 - adc2 / 25) + "mV", 10, 250);
   canvas.drawString("ADS2", 10, 310);
-  canvas.drawString("A2: " + String(adc6 / 25) + "mV", 10, 360);
-  canvas.drawString("A3: " + String(adc7 / 25) + "mV", 10, 400);
+  canvas.drawString("A2: " + String(255 - adc6 / 25) + "mV", 10, 360);
+  canvas.drawString("A3: " + String(255 - adc7 / 25) + "mV", 10, 400);
 
   canvas.drawString("Life CPT: " + String(cpt++), 10, 560);
   canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
