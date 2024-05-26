@@ -10,7 +10,7 @@ DFRobot_ADS1115 ads2(&secondWire);
 
 //************* DEFINITION DES constantes ************
 
-const char *pin = "1234";  // Change this to reflect the pin expected by the real slave BT device
+const char *pin = "2809";  // Change this to reflect the pin expected by the real slave BT device
 String myName = "ESP32-BT-Master";
 String slaveName = "ESP32-BT-Slave";  // Change this to reflect the real name of your slave BT device
 
@@ -78,6 +78,7 @@ void init_ads1() {
 }
 
 void init_ads2() {
+ 
   ads2.setAddr_ADS1115(ADS1115_IIC_ADDRESS0);  // 0x48
   ads2.setGain(eGAIN_TWOTHIRDS);
   ads2.setMode(eMODE_SINGLE);

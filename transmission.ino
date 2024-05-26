@@ -41,7 +41,8 @@ esp_timer_handle_t timer;
 //***************************************Interuption***************************
 // cette fonction est appelé à chaque déclanchement du timer
 void IRAM_ATTR onTimer(void *param) {
- 
+      digitalWrite(PIN_G33, HIGH); //1
+
  if (Mode == MODE_BT) {
     if (ads2.checkADS1115()) {  // gère les données du deuxième module
 
@@ -58,10 +59,8 @@ void IRAM_ATTR onTimer(void *param) {
 
       adc2 = ads1.readVoltage(2);
       Serial.printf("A12:%5d ", adc2 / 25);
-      //digitalWrite(PIN_G33, HIGH); //1
       adc1 = ads1.readVoltage(1);
       Serial.printf("A11:%5d ", adc1 / 25);
-      //digitalWrite(PIN_G33, LOW); //0
       adc0 = ads1.readVoltage(0);
       Serial.printf("A10:%5d \n", 255 - adc0 / 25);
     } else {
@@ -109,7 +108,8 @@ for (char cptSend = 0; cptSend < NB_data; cptSend++) {
     SerialBT.print(sendtab[cptSend]);
 }
 }
-   
+ digitalWrite(PIN_G33, LOW); //0
+
 }
 //*******************************Initialisation**************************************
 void setup() {
@@ -121,43 +121,43 @@ void setup() {
   init_bluetooth();
   //#endif
   secondWire.begin(I2C_SDA, I2C_SCL, (uint32_t)400000U);  // Initialisation du deuxième bus I2C avec les broches SDA et SCL définies
-  init_screen(90, 90, 540, 960, 5);
+  init_screen(180, 180, 960, 540, 5);
+  
   init_ads1();
   init_ads2();
+
   //************* Configuration de l'interruption du timer ************
   esp_timer_create_args_t timerArgs;       // crée une structure pour configurer le timer
   timerArgs.callback = &onTimer;           // Définition de la fonction de rappel
   timerArgs.arg = NULL;                    // rien de plus n'est passé à la fonction de rappel
   esp_timer_create(&timerArgs, &timer);    //Création du timer
   esp_timer_start_periodic(timer, 20000);  // Déclencher toutes les 20 ms
-  //pinMode(PIN_G33, OUTPUT);
+  pinMode(PIN_G33, OUTPUT);
 }
 void loop() {
 
-  /*if (Serial1.available()) {
-              char Menu = Serial1.read();*/
-  //canvas.drawString("le mode ", Menu, 20, 400);
+  
   switch (Mode) {
     case MODE_MENU:
       //SerialBT.print("E");
       canvas.clear();
       canvas.setTextSize(5);
-      canvas.drawString("Thomas Giarrizzo", 10, 0);
-      canvas.drawString("Choisissez le mode", 10, 100);
+      canvas.drawString("Thomas Giarrizzo", 200, 0);
+      canvas.drawString("Choisissez le mode", 180, 100);
       canvas.drawString("Mode BT", 10, 200);
-      canvas.drawString("Mode Manuel", 10, 400);
+      canvas.drawString("Mode Manuel", 10, 300);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
           M5.TP.update();                                  // Met à jour les informations du pavé tactile
           for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
             tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+            if ((FingerItem.x > 0 && FingerItem.x < 960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
               // Vérifie si le toucher est dans la zone définie
               if (!inOptionsMenu) {
-                if (FingerItem.y < 240 && FingerItem.y > 180) {
+                if ((FingerItem.x > 0 && FingerItem.x < 500) &&(FingerItem.y < 240 && FingerItem.y > 180)) {
                   Mode = MODE_BT;
-                } else if (FingerItem.y < 440 && FingerItem.y > 380) {
+                } else if ((FingerItem.x > 0 && FingerItem.x < 300) &&(FingerItem.y < 340 && FingerItem.y > 280)) {
                   Mode = MODE_MANUEL;
                 } 
               }
@@ -171,19 +171,19 @@ void loop() {
       canvas.clear();
       canvas.setTextSize(3);
       canvas.drawString("Welcom to manuel mode", 10, 100);
-      canvas.drawString("Retour", 400, 800);
+      canvas.drawString("Retour", 800, 500);
       canvas.pushCanvas(0, 0, UPDATE_MODE_DU4);
       if (M5.TP.available()) {                             // Vérifie si le pavé tactile est actif
         if (!M5.TP.isFingerUp()) {                         // Vérifie si un doigt est en contact avec l'écran
           M5.TP.update();                                  // Met à jour les informations du pavé tactile
           for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
             tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-            if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+            if ((FingerItem.x > 0 && FingerItem.x < 960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
               // Vérifie si le toucher est dans la zone définie
               if (!inOptionsMenu) {
                 Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-                if (FingerItem.y < 850 && FingerItem.y > 780) {
+                 if (FingerItem.y < 550 && FingerItem.y > 450) {
                   Mode = MODE_MENU;
                 }
               }
@@ -197,7 +197,7 @@ void loop() {
   canvas.clear();
   canvas.setTextSize(3);
   canvas.drawString("Welcom to Bluetooth mode", 10, 50);
-  canvas.drawString("Retour", 400, 800);
+  canvas.drawString("Retour", 800, 300);
   static int cpt = 0;
   canvas.drawString("ADS1", 10, 130);
   canvas.drawString("A0: " + String(255 - adc0 / 25) + "mV", 10, 160);
@@ -215,12 +215,12 @@ void loop() {
       M5.TP.update();                                  // Met à jour les informations du pavé tactile
       for (int i = 0; i < 2; i++) {                    // Parcourt les doigts détectés
         tp_finger_t FingerItem = M5.TP.readFinger(i);  // Lit les informations du doigt
-        if ((FingerItem.x > 0 && FingerItem.x < 540) && (FingerItem.y > 0 && FingerItem.y < 960)) {
+        if ((FingerItem.x > 0 && FingerItem.x <960) && (FingerItem.y > 0 && FingerItem.y < 540)) {
           // Vérifie si le toucher est dans la zone définie
           if (!inOptionsMenu) {
             Serial.printf("Finger ID:%d-->X: %d*C  Y: %d  Size: %d\r\n", FingerItem.id, FingerItem.x, FingerItem.y, FingerItem.size);
 
-            if (FingerItem.y < 850 && FingerItem.y > 780) {
+            if (FingerItem.y < 350 && FingerItem.y > 250) {
               Mode = MODE_MENU;
             }
           }
