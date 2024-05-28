@@ -54,7 +54,7 @@ Ceux-ci sont reliés à un microcontrôleur ESP32 en Bluetooth qui va récupére
 - Alimenté en 5VDC
 - 5 capteurs de flexion commandés en 5VDC
 - Autonomie +- 4h20
-- Consommation 1150mAh
+- Capacitée 1150mAh
 - Contrôlé en Bluetooth (2,4GHz) via une Feather 
 
 ## Bibliothèques nécessaires
