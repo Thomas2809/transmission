@@ -13,7 +13,7 @@ https://github.com/Thomas2809/transmission/assets/166612110/041ae254-5347-47f5-9
 - [Partie mécanique](#partie-mecanique)
    - [Schéma de principe du gant](#schema-de-principe-du-gant)
    - [Schéma de principe de la main robotique](#schema-de-principe-de-la-main-robotique)
-   - [Schéma de principe du PCB](#schema-de-principe-du-pcb)
+   - [Schéma de principe du PCB](#schéma-de-principe-du-pcb)
 - [Schéma bloc](#schema-bloc)      
   - [Gant](#gant)
   - [Main](#main)
