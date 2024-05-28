@@ -13,11 +13,11 @@ https://github.com/Thomas2809/transmission/assets/166612110/041ae254-5347-47f5-9
 - [Partie mécanique](#partie-mécanique)
    - [Schéma de principe du gant](#scéma-de-principe-du-gant)
    - [Schéma de principe de la main robotique](#schéma-de-principe-de-la-main-robotique)
-   - [Schéma de principe du PCB](#schéma-de-principe-du-pcb)
+   - [Schéma de principe du PCB](#schéma-de-principe-du-PCB)
 - [Schéma bloc](#schéma-bloc)      
   - [Gant](#Gant)
-  - [Main](#main)
-- [Fichier sources easyEDA](#fichier-sources-easyeda)
+  - [Main](#Main)
+- [Fichier sources easyEDA](#Fichier-sources-easyEDA)
 
 ## Introduction
 Comme projet de fin d’études, j’ai décidé de créer une main robotique controlée à distance. 
