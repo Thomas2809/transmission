@@ -59,11 +59,11 @@ Ceux-ci sont reliés à un microcontrôleur ESP32 en Bluetooth qui va récupére
 
 ## Bibliothèques nécessaires
 
-- [Bibliothèque pour les servomoteurs](https://github.com/jkb-git/ESP32Servo)
-- [Bibliothèque pour le m5rotate des encodeurs](https://github.com/RobTillaart/M5ROTATE8)
-- [Bibliothèque pour les ADC](https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h)
-- [Bibliothèque pour le M5EPD](https://github.com/m5stack/M5EPD) 
-- [Bibliothèque pour le Bluetooth](https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/)
+- [Servomoteurs](https://github.com/jkb-git/ESP32Servo)
+- [M5rotate des encodeurs](https://github.com/RobTillaart/M5ROTATE8)
+- [ADC](https://github.com/DFRobot/DFRobot_ADS1115/blob/master/DFRobot_ADS1115.h)
+- [M5EPD](https://github.com/m5stack/M5EPD) 
+- [Bluetooth](https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/)
 
 ## Partie mécanique
 
