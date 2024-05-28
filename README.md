@@ -11,7 +11,7 @@ https://github.com/Thomas2809/transmission/assets/166612110/041ae254-5347-47f5-9
   - [Electronique2](#electronique2)
 - [Bibliothèques nécessaires](#bibliothèques-nécessaires)
 - [Partie mécanique](#partie-mécanique)
-   - [Schéma de principe du gant](#scéma-de-principe-du-gant)
+   - [Schéma de principe du gant](#schéma-de-principe-du-gant)
    - [Schéma de principe de la main robotique](#schéma-de-principe-de-la-main-robotique)
    - [Schéma de principe du PCB](#schéma-de-principe-du-PCB)
 - [Schéma bloc](#schéma-bloc)      
