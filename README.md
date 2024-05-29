@@ -1,6 +1,7 @@
-# La main robotique
-
-## transmission_gant_main
+# La transmission de la main robotique
+ [![Static Badge](https://img.shields.io/badge/Transmission%20main%20robotis%C3%A9%20-61DBFB?style=for-the-badge&logo=Arduino&labelColor=red)](https://github.com/Thomas2809/transmission)
+ # La réception de la main robotique
+ [![Static Badge](https://img.shields.io/badge/Reception%20main%20robotis%C3%A9%20-61DBFB?style=for-the-badge&logo=Arduino&labelColor=red)](https://github.com/Daoud1190/Reception_moteur_main)
 ## Démonstration du projet
 https://github.com/Thomas2809/transmission/assets/166612110/041ae254-5347-47f5-9a14-3c6a6fa173a5
 ## Table des matières
